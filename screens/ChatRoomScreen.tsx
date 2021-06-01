@@ -1,7 +1,12 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import {FlatList, Text, View, ImageBackground} from 'react-native'
 
 import { useRoute } from '@react-navigation/native'
+
+import chatRoomData from '../data/Chats'
+import ChatMessage from "../components/ChatMessage";
+import BG from '../assets/images/BG.png'
+import InputBox from "../components/inputBox";
 
 const ChatRoomScreen = () => {
 
@@ -10,9 +15,18 @@ const ChatRoomScreen = () => {
     // console.log(route.params)
 
     return (
-        <View style={{backgroundColor: 'white', flex: 1}}>
-        <Text>Chat Room</Text>
-        </View>
+        <ImageBackground
+            style={{ width: '100%', height: '100%' }}
+            source={BG}
+        >
+        <FlatList
+            data={chatRoomData.messages}
+            renderItem={({ item }) => <ChatMessage message={item} /> }
+            inverted
+        />
+
+            <InputBox />
+        </ImageBackground>
     )
 }
 
