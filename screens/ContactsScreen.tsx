@@ -1,13 +1,32 @@
-import * as React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import ContactListItem from "../components/ContactListItem";
 
 import users from "../data/Users";
+import {API, graphqlOperation} from "aws-amplify";
+import {listUsers} from "../src/graphql/queries";
 
-import { Text, View } from '../components/Themed';
-import NewMessageButton from "../components/NewMessageButton";
+export default function ContactsScreen() {
 
-export default function ChatsScreen() {
+    const [users, setUsers] = useState([])
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const userData = await API.graphql(
+                    graphqlOperation(
+                        listUsers
+                    )
+                )
+                setUsers(userData.data.listUsers.items)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        fetchUsers()
+    }, [])
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -25,5 +44,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+      backgroundColor: 'white'
   },
 });
