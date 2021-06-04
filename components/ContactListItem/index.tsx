@@ -9,7 +9,7 @@ import {ChatRoom, User} from "../../types";
 import styles from "./styles";
 import {useNavigation} from '@react-navigation/native'
 
-import { API, graphqlOperation } from "aws-amplify";
+import {API, Auth, graphqlOperation} from "aws-amplify";
 import {
     createChatRoom,
     createChatRoomUser
@@ -31,7 +31,7 @@ const ContactListItem = (props: ContactItemProps) => {
             const newChatRoomData = await API.graphql(
                 graphqlOperation(
                     createChatRoom, {
-                        input: { }
+                        input: {}
                     }
                 )
             )
@@ -43,12 +43,35 @@ const ContactListItem = (props: ContactItemProps) => {
 
             const newChatRoom = newChatRoomData.data.createChatRoom
 
-            console.log(newChatRoom)
             // 2. Add 'user' to the Chat Room
-
+            await API.graphql(
+                graphqlOperation(
+                    createChatRoomUser, {
+                        input: {
+                            userID: user.id,
+                            chatRoomID: newChatRoom.id
+                        }
+                    }
+                )
+            )
 
             // 3. Add authenticated user to the Chat Room
+            const userInfo = await Auth.currentAuthenticatedUser()
 
+            await API.graphql(
+                graphqlOperation(
+                    createChatRoomUser, {
+                        input: {
+                            userID: userInfo.attributes.sub,
+                            chatRoomID: newChatRoom.id
+                        }
+                    }
+                )
+            )
+            navigation.navigate('ChatRoom', {
+                id: newChatRoom.id,
+                name: "Hardcoded Name"
+            })
         } catch (e) {
             console.log(e)
         }
