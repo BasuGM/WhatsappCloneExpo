@@ -9,6 +9,12 @@ import {ChatRoom, User} from "../../types";
 import styles from "./styles";
 import {useNavigation} from '@react-navigation/native'
 
+import { API, graphqlOperation } from "aws-amplify";
+import {
+    createChatRoom,
+    createChatRoomUser
+} from '../../src/graphql/mutations'
+
 export type ContactItemProps = {
     user: User
 }
@@ -18,8 +24,34 @@ const ContactListItem = (props: ContactItemProps) => {
 
     const navigation = useNavigation()
 
-    const onClick = () => {
-        // navigate to chat room with this user
+    const onClick = async () => {
+        try {
+
+            // 1. Create a new Chat Room
+            const newChatRoomData = await API.graphql(
+                graphqlOperation(
+                    createChatRoom, {
+                        input: { }
+                    }
+                )
+            )
+
+            if (!newChatRoomData.data) {
+                console.log("Failed to create a chat Room")
+                return
+            }
+
+            const newChatRoom = newChatRoomData.data.createChatRoom
+
+            console.log(newChatRoom)
+            // 2. Add 'user' to the Chat Room
+
+
+            // 3. Add authenticated user to the Chat Room
+
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     return (
