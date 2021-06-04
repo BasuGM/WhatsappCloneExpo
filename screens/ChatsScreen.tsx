@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 import ChatListItem from "../components/ChatListItem";
 import {
@@ -12,9 +12,11 @@ import chatRooms from "../data/ChatRooms";
 import {Text, View} from '../components/Themed';
 import NewMessageButton from "../components/NewMessageButton";
 
-import { getUser } from '../src/graphql/queries'
+import { getUser } from './queries'
 
 export default function ChatsScreen() {
+
+    const [chatRooms, setChatRooms] = useState([])
 
     useEffect(() => {
         const fetchChatRooms = async () => {
@@ -30,6 +32,7 @@ export default function ChatsScreen() {
                     )
                 )
 
+                setChatRooms(userData.data.getUser.chatRoomUser.items)
                 console.log(userData)
 
             } catch (e) {
@@ -44,7 +47,7 @@ export default function ChatsScreen() {
             <FlatList
                 style={{width: '100%'}}
                 data={chatRooms}
-                renderItem={({item}) => <ChatListItem chatRoom={item}/>}
+                renderItem={({item}) => <ChatListItem chatRoom={item.chatRoom}/>}
                 keyExtractor={(item) => item.id}
             />
             <NewMessageButton/>
