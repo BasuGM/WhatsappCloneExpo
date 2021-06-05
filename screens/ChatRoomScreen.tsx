@@ -12,7 +12,7 @@ const ChatRoomScreen = () => {
 
     const route = useRoute()
 
-    // console.log(route.params)
+    console.log(route.params)
 
     return (
         <ImageBackground
@@ -25,7 +25,7 @@ const ChatRoomScreen = () => {
             inverted
         />
 
-            <InputBox />
+            <InputBox chatRoomID={route.params.id}  />
         </ImageBackground>
     )
 }
