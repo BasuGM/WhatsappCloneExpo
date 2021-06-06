@@ -19,12 +19,9 @@ const ChatListItem = (props: ChatListItemProps) => {
     const {chatRoom} = props
     const [otherUser, setOtherUser] = useState(null)
 
-    console.log(chatRoom)
-
     const navigation = useNavigation()
-    console.log(chatRoom.chatRoomUsers)
 
-    const user = chatRoom.chatRoomUsers.items[0].user
+    // const user = chatRoom.chatRoomUsers.items[0].user
 
     useEffect(() => {
         const getOtherUser = async () => {
@@ -38,8 +35,8 @@ const ChatListItem = (props: ChatListItemProps) => {
         getOtherUser()
     }, [])
 
-    console.log("user")
-    console.log(user)
+    // console.log("user")
+    // console.log(user)
 
     const onClick = () => {
         navigation.navigate('ChatRoom', {
@@ -60,8 +57,10 @@ const ChatListItem = (props: ChatListItemProps) => {
 
                     <View style={styles.midContainer}>
                         <Text style={styles.username}>{otherUser.name}</Text>
-                        <Text numberOfLines={2} ellipsizeMode={"head"}
-                              style={styles.lastMessage}>{chatRoom.lastMessage ? chatRoom.lastMessage.content : ""}</Text>
+                        <Text
+                            numberOfLines={2}
+                            ellipsizeMode={"head"}
+                            style={styles.lastMessage}>{chatRoom.lastMessage ? `${chatRoom.lastMessage.user.name}: ${chatRoom.lastMessage.content}` : ""}</Text>
                     </View>
                 </View>
 
