@@ -20,8 +20,17 @@ export const getUser = /* GraphQL */ `
                   id
                   name
                   imageUri
-                  status            
+                  status
                 }
+              }
+            }
+            lastMessage {
+              id
+              content
+              updatedAt
+              user {
+                id
+                name
               }
             }
           }
