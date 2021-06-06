@@ -19,6 +19,8 @@ const ChatListItem = (props: ChatListItemProps) => {
     const {chatRoom} = props
     const [otherUser, setOtherUser] = useState(null)
 
+    console.log(chatRoom)
+
     const navigation = useNavigation()
     console.log(chatRoom.chatRoomUsers)
 

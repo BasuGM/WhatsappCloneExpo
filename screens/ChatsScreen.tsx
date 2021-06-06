@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, Text, View, StyleSheet} from 'react-native';
 import ChatListItem from "../components/ChatListItem";
 import {
     API,
@@ -7,9 +7,9 @@ import {
     Auth
 } from "aws-amplify";
 
-import chatRooms from "../data/ChatRooms";
+// import chatRooms from "../data/ChatRooms";
 
-import {Text, View} from '../components/Themed';
+// import {Text, View} from '../components/Themed';
 import NewMessageButton from "../components/NewMessageButton";
 
 import { getUser } from './queries'
@@ -33,7 +33,7 @@ export default function ChatsScreen() {
                 )
 
                 setChatRooms(userData.data.getUser.chatRoomUser.items)
-                console.log(userData)
+                console.log(chatRooms)
 
             } catch (e) {
                 console.log(e)
@@ -44,13 +44,14 @@ export default function ChatsScreen() {
 
     return (
         <View style={styles.container}>
+
             <FlatList
                 style={{width: '100%'}}
                 data={chatRooms}
                 renderItem={({item}) => <ChatListItem chatRoom={item.chatRoom}/>}
                 keyExtractor={(item) => item.id}
             />
-            <NewMessageButton/>
+            <NewMessageButton />
         </View>
     );
 }
@@ -60,5 +61,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: 'white'
     },
 });
