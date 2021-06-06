@@ -8,6 +8,7 @@ import {
 } from "aws-amplify";
 
 import { messagesByChatRoom } from '../src/graphql/queries'
+import { onCreateMessage } from '../src/graphql/subscriptions'
 
 import ChatMessage from "../components/ChatMessage";
 import BG from '../assets/images/BG.png'
@@ -20,7 +21,7 @@ const ChatRoomScreen = () => {
 
     const route = useRoute()
 
-    console.log(route.params.id)
+    // console.log(route.params.id)
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -46,6 +47,30 @@ const ChatRoomScreen = () => {
         }
         getMyId()
     }, [])
+
+    const addMessageToState = (message) => {
+        setMessages([message, ...messages])
+    }
+
+    useEffect(() => {
+        const subscription = API.graphql(
+            graphqlOperation(onCreateMessage)
+        ).subscribe({
+            next: (data) => {
+                const newMessage = data.value.data.onCreateMessage
+                // console.log(data.value.data)
+                // if ( newMessage.chatRoomID !== route.params.id ) {
+                //     // console.log("Message is in another room")
+                //     return
+                // }
+
+                addMessageToState(newMessage)
+            }
+        })
+
+        return () => subscription.unsubscribe();
+    }, [])
+
 
     return (
         <ImageBackground
